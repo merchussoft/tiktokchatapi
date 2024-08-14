@@ -23,21 +23,22 @@ pipeline {
             }
         }
 
-        stage('limpiar-contenedores-y-recursos-huerfanos') {
-            steps {
-                script {
-                    sh 'docker system prune -f'
-                }
-            }
-        }
-
     }
 
     post {
-        always {
-            script {
-                sh 'docker ps'
-            }
+        success {
+            emailext (
+                to: 'merchussoft@hotmail.com',
+                subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "El build ${env.JOB_NAME} #${env.BUILD_NUMBER} fue exitoso."
+            )
+        }
+        failure {
+            emailext (
+                to: 'merchussoft@hotmail.com',
+                subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "El build ${env.JOB_NAME} #${env.BUILD_NUMBER} falló. Verifica el log para más detalles."
+            )
         }
     }
 }
