@@ -3,12 +3,6 @@ pipeline {
 
     stages{
 
-        stage('Checkout-code') {
-            steps {
-                git 'https://github.com/merchussoft/tiktokchatapi.git'
-            }
-        }
-
         stage('limpiar-archivos-yu-directorios-antiguos') {
             steps {
                 script {
