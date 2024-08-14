@@ -1,0 +1,7 @@
+version: '3.9'
+services:
+  api_tiktokchat:
+    build: .
+    container_name: api_tiktokchat
+    ports:
+      - "3001:3000"

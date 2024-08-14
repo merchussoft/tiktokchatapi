@@ -1,0 +1,55 @@
+const express = require('express');
+const { WebcastPushConnection } = require('tiktok-live-connector');
+const socketIo = require('socket.io');
+const http = require('http');
+const cors = require('cors');
+const morgan = require('morgan');
+
+
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server)
+
+app.set('port', process.env.PORT || 3001);
+
+
+app.use(cors());
+app.use(morgan('dev'));
+
+let tiktok_live_connection = null;
+let is_connected = false;
+
+
+const emitToClient = (event, data) => {
+    io.emit(event, data)
+}
+
+
+const connectToTiktok = async (username) => {
+    if (is_connected) {
+        console.log(`ya este conectado a la sala de ${username}`);
+        return;
+    }
+
+    tiktok_live_connection = new WebcastPushConnection(username);
+
+    try {
+        let state = await tiktok_live_connection.connect();
+        is_connected = true;
+        console.log(`Conectado a la transmision en vivo de ${username}.`);
+        emitToClient('connected', {username, viewers_count: state.viewerCount});
+
+        tiktok_live_connection.on('disconnected', () => {
+            console.log('desconectado del chat en vivo...');
+            is_connected = false;
+            emitToClient('disconnected', {message: 'desconectado del chat en vivo...'})
+        })
+
+    } catch (error) {
+        console.log('Error al conectarse al tiktok-live-connector', error)
+        emitToClient('error', {message: 'Error al conectarse a la sala'});
+    }
+}
+
+module.exports = { app, server, io, connectToTiktok}
