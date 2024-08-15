@@ -39,20 +39,12 @@ const connectToTiktok = async (username) => {
     tiktok_live_connection = new WebcastPushConnection(username);
 
     try {
-        let state = await tiktok_live_connection.connect();
+        let {roomId} = await tiktok_live_connection.connect();
         is_connected = true;
         console.log(`Conectado a la transmision en vivo de ${username}.`);
+        emitToClient('connected', {message: `@${username} connected to roomId ${roomId}`});
 
 
-        tiktok_live_connection.on('connected', (state) => {
-            console.log(`@${username} connected to roomId ${state.roomId}`)
-            emitToClient('connected', {message: `@${username} connected to roomId ${state.roomId}`})
-        });
-
-        tiktok_live_connection.on('chat', (chat) => {
-            console.log(chat)
-            emitToClient('chat', {chat})
-        });
 
         tiktok_live_connection.on('disconnected', () => {
             console.log('desconectado del chat en vivo...');
@@ -60,10 +52,25 @@ const connectToTiktok = async (username) => {
             emitToClient('disconnected', {message: 'desconectado del chat en vivo...'})
         })
 
+
+
+        tiktok_live_connection.on('chat', ({comment, nickname, profilePictureUrl}) => {
+            console.log(comment)
+            console.log(nickname)
+            console.log(profilePictureUrl)
+            emitToClient('chat', {comment, nickname, profilePictureUrl})
+        });
+
+
+        tiktok_connection.on('like', like => {
+            console.log(like);
+        });
+
     } catch (error) {
         console.log('Error al conectarse al tiktok-live-connector', error)
         emitToClient('error', {message: 'Error al conectarse a la sala'});
     }
+
 }
 
 module.exports = { app, server, io, connectToTiktok}
