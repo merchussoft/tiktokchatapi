@@ -62,7 +62,7 @@ const connectToTiktok = async (username) => {
         });
 
 
-        tiktok_connection.on('like', like => {
+        tiktok_live_connection.on('like', like => {
             console.log(like);
         });
 
