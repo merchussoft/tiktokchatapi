@@ -9,7 +9,11 @@ const morgan = require('morgan');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server)
+const io = socketIo(server, {
+    cors: {
+        origin: '*'
+    }
+})
 
 app.set('port', process.env.PORT || 3000);
 
