@@ -42,7 +42,17 @@ const connectToTiktok = async (username) => {
         let state = await tiktok_live_connection.connect();
         is_connected = true;
         console.log(`Conectado a la transmision en vivo de ${username}.`);
-        emitToClient('connected', {username, viewers_count: state.viewerCount});
+
+
+        tiktok_live_connection.on('connected', (state) => {
+            console.log(`@${username} connected to roomId ${state.roomId}`)
+            emitToClient('connected', {message: `@${username} connected to roomId ${state.roomId}`})
+        });
+
+        tiktok_live_connection.on('chat', (chat) => {
+            console.log(chat)
+            emitToClient('chat', {chat})
+        });
 
         tiktok_live_connection.on('disconnected', () => {
             console.log('desconectado del chat en vivo...');
