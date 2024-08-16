@@ -100,7 +100,7 @@ const connectToTiktok = async (username) => {
             console.log(data.uniqueId, "subscribed!");
         });
 
-        tiktokLiveConnection.on('liveIntro', (msg) => {
+        tiktok_live_connection.on('liveIntro', (msg) => {
             console.log(msg);
         })
 
