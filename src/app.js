@@ -36,11 +36,7 @@ const connectToTiktok = async (username) => {
         return;
     }
 
-    tiktok_live_connection = new WebcastPushConnection(username, {
-        processInitialData: false,
-        enableExtendedGiftInfo: true,
-        enableWebsocketUpgrade: true,
-    });
+    tiktok_live_connection = new WebcastPushConnection(username);
 
     try {
         let {roomId} = await tiktok_live_connection.connect();
@@ -67,41 +63,41 @@ const connectToTiktok = async (username) => {
 
 
 
-        tiktok_live_connection.on('chat', ({comment, nickname, profilePictureUrl}) => {
-            emitToClient('chat', {comment, nickname, profilePictureUrl})
+        tiktok_live_connection.on('chat', ({comment, nickname, profilePictureUrl, uniqueId}) => {
+            emitToClient('chat', {comment, nickname, profilePictureUrl, uniqueId})
         });
 
 
-        tiktok_live_connection.on('like', ({likeCount, totalLikeCount, nickname, profilePictureUrl}) => {
-            let comment = `${nickname} le dio me gusta al LIVE`
-            emitToClient('like', {likeCount, totalLikeCount, nickname, profilePictureUrl, comment})
+        tiktok_live_connection.on('like', ({likeCount, totalLikeCount, nickname, profilePictureUrl, uniqueId}) => {
+            let comment = `${uniqueId} le dio me gusta al LIVE`
+            emitToClient('like', {likeCount, totalLikeCount, nickname, profilePictureUrl, comment, uniqueId})
         });
 
         tiktok_live_connection.on('member', data => {
-            console.log(data);
+            console.log('member', data);
         });
 
         tiktok_live_connection.on('roomUser', data => {
-            console.log(data);
+            console.log('roomUser', data);
         });
 
         tiktok_live_connection.on('follow', (data) => {
-            console.log(data);
+            console.log('follow', data);
             console.log(data.uniqueId, "followed!");
         });
 
-        tiktok_live_connection.on('share', (data) => {
-            console.log(data);
-            console.log(data.uniqueId, "shared the stream!");
+        tiktok_live_connection.on('share', ({comment, nickname, profilePictureUrl, uniqueId}) => {
+            let comment = `${uniqueId} compartió la transmisión!`
+            emitToClient('share', {comment, nickname, profilePictureUrl, uniqueId})
         });
 
         tiktok_live_connection.on('subscribe', (data) => {
-            console.log(data);
+            console.log('subscribe', data);
             console.log(data.uniqueId, "subscribed!");
         });
 
         tiktok_live_connection.on('liveIntro', (msg) => {
-            console.log(msg);
+            console.log('liveIntro ', msg);
         })
 
     } catch (error) {
