@@ -36,7 +36,11 @@ const connectToTiktok = async (username) => {
         return;
     }
 
-    tiktok_live_connection = new WebcastPushConnection(username);
+    tiktok_live_connection = new WebcastPushConnection(username, {
+        processInitialData: false,
+        enableExtendedGiftInfo: true,
+        enableWebsocketUpgrade: true,
+    });
 
     try {
         let {roomId} = await tiktok_live_connection.connect();
@@ -50,21 +54,55 @@ const connectToTiktok = async (username) => {
             console.log('desconectado del chat en vivo...');
             is_connected = false;
             emitToClient('disconnected', {message: 'desconectado del chat en vivo...'})
+        });
+
+        tiktok_live_connection.on('streamEnd', (actionId) => {
+            if (actionId === 3) {
+                console.log('Stream ended by user');
+            }
+            if (actionId === 4) {
+                console.log('Stream ended by platform moderator (ban)');
+            }
         })
 
 
 
         tiktok_live_connection.on('chat', ({comment, nickname, profilePictureUrl}) => {
-            console.log(comment)
-            console.log(nickname)
-            console.log(profilePictureUrl)
             emitToClient('chat', {comment, nickname, profilePictureUrl})
         });
 
 
-        tiktok_live_connection.on('like', like => {
-            console.log(like);
+        tiktok_live_connection.on('like', ({likeCount, totalLikeCount, nickname, profilePictureUrl}) => {
+            let comment = `${nickname} le dio me gusta al LIVE`
+            emitToClient('like', {likeCount, totalLikeCount, nickname, profilePictureUrl, comment})
         });
+
+        tiktok_live_connection.on('member', data => {
+            console.log(data);
+        });
+
+        tiktok_live_connection.on('roomUser', data => {
+            console.log(data);
+        });
+
+        tiktok_live_connection.on('follow', (data) => {
+            console.log(data);
+            console.log(data.uniqueId, "followed!");
+        });
+
+        tiktok_live_connection.on('share', (data) => {
+            console.log(data);
+            console.log(data.uniqueId, "shared the stream!");
+        });
+
+        tiktok_live_connection.on('subscribe', (data) => {
+            console.log(data);
+            console.log(data.uniqueId, "subscribed!");
+        });
+
+        tiktokLiveConnection.on('liveIntro', (msg) => {
+            console.log(msg);
+        })
 
     } catch (error) {
         console.log('Error al conectarse al tiktok-live-connector', error)
