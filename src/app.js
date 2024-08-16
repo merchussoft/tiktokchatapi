@@ -86,7 +86,7 @@ const connectToTiktok = async (username) => {
             console.log(data.uniqueId, "followed!");
         });
 
-        tiktok_live_connection.on('share', ({comment, nickname, profilePictureUrl, uniqueId}) => {
+        tiktok_live_connection.on('share', ({nickname, profilePictureUrl, uniqueId}) => {
             let comment = `${uniqueId} compartió la transmisión!`
             emitToClient('share', {comment, nickname, profilePictureUrl, uniqueId})
         });
