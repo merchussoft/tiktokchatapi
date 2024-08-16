@@ -52,16 +52,6 @@ const connectToTiktok = async (username) => {
             emitToClient('disconnected', {message: 'desconectado del chat en vivo...'})
         });
 
-        tiktok_live_connection.on('streamEnd', (actionId) => {
-            if (actionId === 3) {
-                console.log('Stream ended by user');
-            }
-            if (actionId === 4) {
-                console.log('Stream ended by platform moderator (ban)');
-            }
-        })
-
-
 
         tiktok_live_connection.on('chat', ({comment, nickname, profilePictureUrl, uniqueId}) => {
             emitToClient('chat', {comment, nickname, profilePictureUrl, uniqueId})
@@ -73,8 +63,9 @@ const connectToTiktok = async (username) => {
             emitToClient('like', {likeCount, totalLikeCount, nickname, profilePictureUrl, comment, uniqueId})
         });
 
-        tiktok_live_connection.on('member', data => {
-            console.log('member', data);
+        tiktok_live_connection.on('member', ({ nickname, profilePictureUrl, uniqueId }) => {
+            let comment = `${uniqueId} se unió a la transmision`
+            emitToClient('member', {comment, nickname, profilePictureUrl, uniqueId})
         });
 
         tiktok_live_connection.on('roomUser', data => {
@@ -95,10 +86,6 @@ const connectToTiktok = async (username) => {
             console.log('subscribe', data);
             console.log(data.uniqueId, "subscribed!");
         });
-
-        tiktok_live_connection.on('liveIntro', (msg) => {
-            console.log('liveIntro ', msg);
-        })
 
     } catch (error) {
         console.log('Error al conectarse al tiktok-live-connector', error)
