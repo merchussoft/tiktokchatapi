@@ -44,8 +44,6 @@ const connectToTiktok = async (username) => {
         console.log(`Conectado a la transmision en vivo de ${username}.`);
         emitToClient('connected', {message: `@${username} connected to roomId ${roomId}`});
 
-
-
         tiktok_live_connection.on('disconnected', () => {
             console.log('desconectado del chat en vivo...');
             is_connected = false;
@@ -59,7 +57,7 @@ const connectToTiktok = async (username) => {
 
 
         tiktok_live_connection.on('like', ({likeCount, totalLikeCount, nickname, profilePictureUrl, uniqueId}) => {
-            let comment = `${uniqueId} le dio me gusta al LIVE`
+            let comment = 'le dio me gusta al LIVE'
             emitToClient('like', {likeCount, totalLikeCount, nickname, profilePictureUrl, comment, uniqueId})
         });
 
@@ -78,7 +76,7 @@ const connectToTiktok = async (username) => {
         });
 
         tiktok_live_connection.on('share', ({nickname, profilePictureUrl, uniqueId}) => {
-            let comment = `${uniqueId} compartió la transmisión!`
+            let comment = 'compartió la transmisión!';
             emitToClient('share', {comment, nickname, profilePictureUrl, uniqueId})
         });
 
