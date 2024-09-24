@@ -23,6 +23,8 @@ app.use(morgan('dev'));
 
 let tiktok_live_connection = null;
 let is_connected = false;
+let user_likes = {};
+let viewerCount = 0;
 
 
 const emitToClient = (event, data) => {
@@ -57,8 +59,17 @@ const connectToTiktok = async (username) => {
 
 
         tiktok_live_connection.on('like', ({likeCount, totalLikeCount, nickname, profilePictureUrl, uniqueId}) => {
-            let comment = 'le dio me gusta al LIVE'
-            emitToClient('like', {likeCount, totalLikeCount, nickname, profilePictureUrl, comment, uniqueId})
+            const user_id = uniqueId; // obtenemos el ID del usuario que ah dado like
+            let data_return = {totalLikeCount}
+
+            // verificamos si el usuario ya envio un like
+            if(!user_likes[user_id]){
+                user_likes[user_id] = true;
+                let comment = 'le dio me gusta al LIVE'
+                data_return = {likeCount, totalLikeCount, nickname, profilePictureUrl, comment, uniqueId}
+            }
+
+            emitToClient('like', data_return)
         });
 
         tiktok_live_connection.on('member', ({ nickname, profilePictureUrl, uniqueId }) => {
