@@ -52,6 +52,12 @@ const connectToTiktok = async (username) => {
             emitToClient('disconnected', {message: 'desconectado del chat en vivo...'})
         });
 
+	tiktok_live_connection.on('streamEnd', () =>{
+	    console.log('La transmision ha terminado');
+	    is_connected = false;
+	    emitToClient('streamEnd', {message: 'La transmision ha terminado'});
+	})
+
 
         tiktok_live_connection.on('chat', ({comment, nickname, profilePictureUrl, uniqueId}) => {
             emitToClient('chat', {comment, nickname, profilePictureUrl, uniqueId})
