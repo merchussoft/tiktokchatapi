@@ -9,7 +9,7 @@ module.exports = {
 
         if(!user_likes[uniqueId]){
             user_likes[uniqueId] = true;
-            let comment = 'le dio me gusta al LIVE'
+            let comment = '[Like] le dio me gusta al LIVE'
             data_return = {likeCount, totalLikeCount, nickname, profilePictureUrl, comment, uniqueId}
         }
 
