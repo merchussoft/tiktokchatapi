@@ -3,8 +3,6 @@ const http = require('http');
 const cors = require('cors');
 const morgan = require('morgan');
 
-
-
 const app = express();
 const server = http.createServer(app);
 
