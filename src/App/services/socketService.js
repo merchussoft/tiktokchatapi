@@ -1,14 +1,14 @@
 const socketIo = require('socket.io');
 const { connectToTiktok } = require('./tiktokService');
 
-const  io = null;
-
 const initSocket = (server) => {
 
     const io = socketIo(server, {
         cors: {
             origin: '*'
-        }
+        },
+        pingInterval: 25000,  // Enviar ping cada 25 segundos
+        pingTimeout: 60000,   // Esperar 60 segundos para una respuesta antes de desconectar
     });
 
     io.on('connection', socket => {
@@ -24,7 +24,6 @@ const initSocket = (server) => {
             socket.join(`${username}_${ip_connected}`);
             await connectToTiktok(io, username);
         });
-    
     
         socket.on('disconnect', () => {
             console.log('Cliente desconectado')

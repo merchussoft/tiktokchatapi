@@ -4,7 +4,7 @@ module.exports = {
     name: "social",
     execute: ({io, displayType, uniqueId}) => {
 
-        console.log('estamos mirando la data ===== ', displayType);
+        console.log('estamos mirando la data de lo social ===== ', displayType);
         //let comment = 'compartió la transmisión!';
     //emitToClient(io, 'share', {comment, nickname, profilePictureUrl, uniqueId})
 

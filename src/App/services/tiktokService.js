@@ -25,7 +25,6 @@ const connectToTiktok = async (io, username) => {
 
         Object.keys(events).forEach(event_key => {
             let event = events[event_key];
-            console.log('mirando esto ==== ', event)
             tiktok_live_connection.on(event.name, (data) => {
                 event.execute({
                     io,
