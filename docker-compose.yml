@@ -4,6 +4,6 @@ services:
     build: .
     container_name: api_tiktokchat
     ports:
-      - "3000:3000"
+      - "3041:3000"
     env_file:
       - .env
