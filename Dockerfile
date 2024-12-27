@@ -21,4 +21,4 @@ EXPOSE 3000
 EXPOSE 3041
 
 # Comando para iniciar la aplicación
-CMD ["yarn", "start"]
+CMD ["yarn", "dev"]
