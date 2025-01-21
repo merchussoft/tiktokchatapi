@@ -18,8 +18,10 @@ pipeline {
         stage('construir-y-desplegar-con-docker-compose') {
             steps {
                 script {
-                    sh 'docker compose down'
-                    sh 'docker compose up --build -d'
+                    sh '''
+                    docker-compose down
+                    docker-compose up --build -d
+                    '''
                 }
             }
         }
