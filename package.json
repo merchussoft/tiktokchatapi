@@ -12,10 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "cors": "2.8.5",
+    "dotenv": "^16.4.7",
     "express": "4.19.2",
     "morgan": "1.10.0",
+    "node-fetch": "3.3.2",
     "socket.io": "4.7.5",
-    "tiktok-live-connector": "^1.2.0",
+    "tiktok-live-connector": "^1.2.2",
     "winston": "^3.16.0",
     "ws": "8.18.0"
   }

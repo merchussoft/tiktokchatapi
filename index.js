@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { app, server } = require('./src/server');
 const {initSocket} = require('./src/App/services/socketService');
 

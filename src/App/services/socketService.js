@@ -1,6 +1,8 @@
 const socketIo = require('socket.io');
 const { connectToTiktok } = require('./tiktokService');
 
+
+
 const initSocket = (server) => {
 
     const io = socketIo(server, {
@@ -13,6 +15,7 @@ const initSocket = (server) => {
 
     io.on('connection', socket => {
         console.log('nuevo cliente conectado');
+        
     
         socket.on('connectToTiktok', async (username) => {
             console.log(`Recibido el usuario: ${username}`);
@@ -27,6 +30,7 @@ const initSocket = (server) => {
     
         socket.on('disconnect', () => {
             console.log('Cliente desconectado')
+            
         })
     })
 }
