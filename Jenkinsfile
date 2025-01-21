@@ -19,8 +19,9 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    docker compose down
-                    docker compose up --build -d
+                    docker version
+                    docker info
+                    docker compose --version
                     '''
                 }
             }
