@@ -9,6 +9,10 @@ pipeline {
                     args '-u root' // Ejecutamos como root para instalar dependencias si es necesario
                 }
             }
+
+            steps {
+                sh 'npm install' // Instalamos las dependencias
+            }
         }
     }
 }
