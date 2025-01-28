@@ -1,6 +1,5 @@
 pipeline {
-    agent any
-    tools {nodejs "node"}
+     docker { image 'node:16' } // Usar una imagen oficial de Node.js
 	
 	environment {
         SCANNER_HOME = tool 'sonarqube'
