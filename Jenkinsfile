@@ -66,12 +66,15 @@ pipeline {
                         sh '''
                             vercel login --token $VERCEL_TOKEN
                         '''
+                    } catch (Exception e) {
+                        echo "Vercel deployment failed: ${e.getMessage()}"
+                        error("Stopping pipeline due to Vercel deployment failure.")
                     }
                 }
             }
         }
 
-
+    }
 
     post {
         success {
