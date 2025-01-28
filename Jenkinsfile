@@ -20,7 +20,6 @@ pipeline {
             steps {
                 script {
                     //sh 'npm install -g vercel'
-                     sh 'which node'
                      sh 'node -v'
                 }
             }
