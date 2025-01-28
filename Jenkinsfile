@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker { image 'node:16' } // Usar una imagen oficial de Node.js
+        docker { image 'node:18' } // Usar una imagen oficial de Node.js
     }
 	
 	environment {
@@ -15,6 +15,12 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/merchussoft/tiktokchatapi'
                 echo 'Git Checkout Completed'
+            }
+        }
+
+        stage('npm version') {
+            steps {
+                sh 'nodejs --version'
             }
         }
 
