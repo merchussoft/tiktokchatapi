@@ -1,11 +1,9 @@
 pipeline {
-    agent {
-        docker { image 'node:18' } // Usar una imagen oficial de Node.js
-    }
+    agent any
 	
 	environment {
         SCANNER_HOME = tool 'sonarqube'
-        //NODE_HOME = tool 'NodeJS', type: 'NodeJSInstallation'
+        NODE_HOME = tool 'NodeJS', type: 'NodeJSInstallation'
         //PATH = "${NODE_HOME}/bin:${env.PATH}"
         VERCEL_TOKEN = credentials('vercel-token') // Credencial para Vercel
     }
