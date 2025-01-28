@@ -3,7 +3,7 @@ pipeline {
 	
 	environment {
         SCANNER_HOME = tool 'sonarqube'
-        NODE_HOME = tool name: 'NodeJS', type: 'NodeJSInstallation'
+       // NODE_HOME = tool name: 'NodeJS', type: 'NodeJSInstallation'
         PATH = "${NODE_HOME}/bin:${env.PATH}"
         VERCEL_TOKEN = credentials('vercel-token') // Credencial para Vercel
     }
@@ -19,7 +19,9 @@ pipeline {
         stage('install vercer global'){
             steps {
                 script {
-                    sh 'npm install -g vercel'
+                    //sh 'npm install -g vercel'
+                     sh 'which node'
+                     sh 'node -v'
                 }
             }
         }
