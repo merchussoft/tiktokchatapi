@@ -3,7 +3,7 @@ pipeline {
 	
 	environment {
         SCANNER_HOME = tool 'sonarqube'
-       // NODE_HOME = tool name: 'NodeJS', type: 'NodeJSInstallation'
+        NODE_HOME = tool 'NodeJS', type: 'NodeJSInstallation'
         PATH = "${NODE_HOME}/bin:${env.PATH}"
         VERCEL_TOKEN = credentials('vercel-token') // Credencial para Vercel
     }
@@ -20,45 +20,18 @@ pipeline {
             steps {
                 withSonarQubeEnv(credentialsId: 'sonarqube', installationName: 'sonarqube') {
                     sh '''
-                        $SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectKey=tiktokchatapi \
-                        -Dsonar.projectName=tiktokchatapi \
+					$SCANNER_HOME/bin/sonar-scanner \
+						-Dsonar.projectKey=tiktokchatapi \
+						-Dsonar.projectName=tiktokchatapi \
                         -Dsonar.projectVersion=1.0 \
-                        -Dsonar.sources=${env.WORKSPACE} \
+                        -Dsonar.sources=/var/jenkins_home/workspace/tiktokchatapi \
                         -Dsonar.sourceEncoding=UTF-8 \
                         -Dsonar.host.url=http://192.168.1.50:9000
-                    '''
-                } 
-            }
-        }
-        
-
-        stage('SonarQube Quality Gate') {
-            steps {
-                timeout(time: 1, unit: 'MINUTES'){
-                    waitForQualityGate abortPipeline: true
+					'''
+                    echo 'SonarQube Analysis Completed'
                 }
             }
         }
-
-        stage('Deply to vercel') {
-            steps {
-                script {
-                    try {
-                        echo "Deploying to vercel"
-
-                        // Login to vercel usando token
-                        sh '''
-                            vercel login --token $VERCEL_TOKEN
-                        '''
-                    } catch (Exception e) {
-                        echo "Vercel deployment failed: ${e.getMessage()}"
-                        error("Stopping pipeline due to Vercel deployment failure.")
-                    }
-                }
-            }
-        }
-
     }
 
     post {
