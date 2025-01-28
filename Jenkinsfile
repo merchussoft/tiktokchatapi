@@ -20,22 +20,17 @@ pipeline {
             steps {
 
                 script {
-                    try {
-                        withSonarQubeEnv(credentialsId: 'sonarqube', installationName: 'sonarqube') {
-                            sh '''
-                                $SCANNER_HOME/bin/sonar-scanner \
-                                -Dsonar.projectKey=tiktokchatapi \
-                                -Dsonar.projectName=tiktokchatapi \
-                                -Dsonar.projectVersion=1.0 \
-                                -Dsonar.sources=${env.WORKSPACE} \
-                                -Dsonar.sourceEncoding=UTF-8 \
-                                -Dsonar.host.url=http://192.168.1.50:9000
-                            '''
-                        } 
-                    } catch (Exception e) {
-                        echo "SonarQube analysis failed: ${e.getMessage()}"
-                        error("Stopping pipeline due to SonarQube failure.")
-                    }
+                    withSonarQubeEnv(credentialsId: 'sonarqube', installationName: 'sonarqube') {
+                        sh '''
+                            $SCANNER_HOME/bin/sonar-scanner \
+                            -Dsonar.projectKey=tiktokchatapi \
+                            -Dsonar.projectName=tiktokchatapi \
+                            -Dsonar.projectVersion=1.0 \
+                            -Dsonar.sources=${env.WORKSPACE} \
+                            -Dsonar.sourceEncoding=UTF-8 \
+                            -Dsonar.host.url=http://192.168.1.50:9000
+                        '''
+                    } 
                 }
             }
         }
