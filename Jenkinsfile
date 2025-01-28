@@ -1,9 +1,13 @@
 pipeline {
     agent any
+
+    tools {
+        nodejs 'NodeJS'  // Aquí usas el nombre que le diste a la instalación de NodeJS
+    }
 	
 	environment {
         SCANNER_HOME = tool 'sonarqube'
-        NODE_HOME = tool 'NodeJS', type: 'NodeJSInstallation'
+        //NODE_HOME = tool 'NodeJS', type: 'NodeJSInstallation'
         //PATH = "${NODE_HOME}/bin:${env.PATH}"
         VERCEL_TOKEN = credentials('vercel-token') // Credencial para Vercel
     }
