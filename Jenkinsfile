@@ -16,15 +16,6 @@ pipeline {
             }
         }
 
-        stage('install vercer global'){
-            steps {
-                script {
-                    //sh 'npm install -g vercel'
-                     sh 'node -v'
-                }
-            }
-        }
-
         stage('SonarQube Analysis') {
             steps {
 
