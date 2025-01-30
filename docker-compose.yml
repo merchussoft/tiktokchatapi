@@ -3,6 +3,7 @@ services:
   api_tiktokchat:
     build: .
     container_name: api_tiktokchat
+    restart: always
     environment:
       - PORT=3041
     ports:
