@@ -1,18 +1,19 @@
 pipeline {
     agent any
-
-    tools {
-        nodejs 'NodeJS'  // Aquí usas el nombre que le diste a la instalación de NodeJS
-    }
 	
 	environment {
         SCANNER_HOME = tool 'sonarqube'
-        //NODE_HOME = tool 'NodeJS', type: 'NodeJSInstallation'
-        //PATH = "${NODE_HOME}/bin:${env.PATH}"
         VERCEL_TOKEN = credentials('vercel-token') // Credencial para Vercel
     }
 
     stages {
+
+        stage('Docker down and clean') {
+            steps {
+                sh 'docker compose down -v'
+            }
+        }
+
         stage('Git Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/merchussoft/tiktokchatapi'
@@ -20,11 +21,7 @@ pipeline {
             }
         }
 
-        stage('npm version') {
-            steps {
-                sh 'nodejs --version'
-            }
-        }
+        
 
         stage('SonarQube Analysis') {
             steps {
@@ -40,6 +37,13 @@ pipeline {
 					'''
                     echo 'SonarQube Analysis Completed'
                 }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker compose up --build -d'
+                echo 'Docker Image Build Completed'
             }
         }
     }
