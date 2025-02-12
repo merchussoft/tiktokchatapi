@@ -3,7 +3,6 @@ pipeline {
 	
 	environment {
         SCANNER_HOME = tool 'sonarqube'
-        VERCEL_TOKEN = credentials('vercel-token') // Credencial para Vercel
     }
 
     stages {
@@ -32,8 +31,7 @@ pipeline {
 						-Dsonar.projectName=tiktokchatapi \
                         -Dsonar.projectVersion=1.0 \
                         -Dsonar.sources=/var/jenkins_home/workspace/tiktokchatapi \
-                        -Dsonar.sourceEncoding=UTF-8 \
-                        -Dsonar.host.url=http://192.168.1.50:9000
+                        -Dsonar.sourceEncoding=UTF-8 
 					'''
                     echo 'SonarQube Analysis Completed'
                 }
