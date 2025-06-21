@@ -2,6 +2,7 @@ const { WebcastPushConnection } = require('tiktok-live-connector');
 const { emitToClient } = require('./emitToClient');
 const events = require('../events');
 const axios = require('axios');
+const { n8nCennect } = require('../hooks/n8nConnect');
 
 
 let tiktok_live_connection = null;
@@ -18,9 +19,18 @@ const connectToTiktok = async (io, username, esp32Socket) => {
 
 
     try {
-        let {roomId} = await tiktok_live_connection.connect();
+        let {roomId, type } = await tiktok_live_connection.connect();
         connectionState.is_connected = true;
+        console.log(`mirandop si es envivo o nop ${type}.`);
         console.log(`Conectado a la transmision en vivo de ${username}.`);
+        await n8nCennect({
+            message: `Si te gustan los buenos momentos, @${username} ya está en vivo en tiktok. \n 
+                🎤 Charlas épicas, fails garantizados y risas sin parar. \n
+                🔥 No te quedes fuera, ¡el show está por comenzar! \n
+                🟢 Únete al stream \n https://www.tiktok.com/@${username}/live`,
+            link: `https://www.tiktok.com/@${username}/live`
+        });
+
         emitToClient(io, 'connected', {message: `@${username} connected to roomId ${roomId}`});
 
         Object.keys(events).forEach(event_key => {
